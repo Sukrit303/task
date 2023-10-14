@@ -6,6 +6,6 @@ const blogPostSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'User',
     required: true
-  },
+  }
 })
 module.exports = mongoose.model('BlogPost', blogPostSchema);
