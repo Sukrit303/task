@@ -98,5 +98,54 @@ router.put('/blog/:id', isAuthenticated, async (req, res) => {
     }
 })
 
+// Delete Blog
+router.delete('/blog/:id', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params.id;
+        const blogs = await Blog.findById({_id : req.params.id, autherId: req.user._id})
+
+        if(!blogs) {
+            return res.status(200).json({
+                success: true,
+                message: "No Blog found"
+            })
+        }
+        const deleteData = await Blog.findOneAndDelete(blogs._id, req.body, { new : true})
+
+        return res.status(403).json({
+            success: true,
+            data : deleteData
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+})
+
+// Bonus Get single Blog
+router.get('/blog/:id', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params.id;
+        const blogs = await Blog.findById({_id : req.params.id})
+
+        if(!blogs) {
+            return res.status(200).json({
+                success: true,
+                message: "No Blog found"
+            })
+        }
+        return res.status(403).json({
+            success: true,
+            data : blogs
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+})
 
 module.exports = router
