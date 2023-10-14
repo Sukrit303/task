@@ -5,7 +5,9 @@ const router = express.Router();
 const Blog = require('../models/blog')
 
 // Authentication Middleware
-const { isAuthenticated } = require("../middlewares/authentication")
+const { isAuthenticated } = require("../middlewares/authentication");
+const { findById } = require('../models/user');
+const User = require('../models/user');
 
 // Creating a blog by logined user
 router.post('/blog', isAuthenticated, async (req, res) => {
@@ -69,5 +71,32 @@ router.get('/blog', isAuthenticated, async (req, res) => {
         })
     }
 })
+
+// Update Blog
+router.put('/blog/:id', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params.id;
+        const blogs = await Blog.findById({_id : req.params.id, autherId: req.user._id})
+
+        if(!blogs) {
+            return res.status(200).json({
+                success: true,
+                message: "No Blog found"
+            })
+        }
+        const updatedData = await Blog.findOneAndUpdate(blogs._id, req.body, { new : true})
+
+        return res.status(403).json({
+            success: true,
+            data : updatedData
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+})
+
 
 module.exports = router
