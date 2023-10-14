@@ -11,9 +11,10 @@ connectDatabase()
 
 // Routes middleware
 const user = require('./routes/auth')
-
+const blog = require('./routes/blog')
 
 app.use(user)
+app.use(blog)
 
 // Server Configuration
 app.listen(process.env, () => {

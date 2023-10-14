@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 router.use(bodyParser.json());
 dotenv.config();
 
-// Implementation of user reg
+// Authenticatation routes
 router.post("/signup", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -39,7 +39,6 @@ router.post("/signup", async (req, res) => {
         });
     }
 });
-// Implementation of user login
 router.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
